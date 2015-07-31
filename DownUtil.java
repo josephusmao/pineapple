@@ -1,5 +1,6 @@
 package learn;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
@@ -22,6 +23,9 @@ public class DownUtil {
 	}
 
 	public void download() throws Exception {
+		if(new File(targetFile).exists())	// 若文件已经存在
+			return;
+		
 		URL url = new URL(path);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -76,6 +80,12 @@ public class DownUtil {
 				conn.setRequestMethod("GET");
 				conn.setConnectTimeout(5000);
 				conn.setRequestProperty("Accept-Language", "zh-CN");
+				conn.setRequestProperty("Accept",
+						"image/gif, image/jpeg, image/pjpeg, image/pjpeg, "
+								+ "application/x-shockwave-flash, application/xaml+xml, "
+								+ "application/vnd.ms-xpsdocument, application/x-ms-xbap, "
+								+ "application/x-ms-application, application/vnd.ms-excel, "
+								+ "application/vnd.ms-powerpoint, application/msword, */*");
 				conn.setRequestProperty("Charset", "UTF-8");
 
 				InputStream inStream = conn.getInputStream();

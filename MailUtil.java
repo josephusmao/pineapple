@@ -12,7 +12,6 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -20,21 +19,40 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 public class MailUtil {
-	private String to = "";
-	private String from = "";
-	private String host = "";
-	private String username = "";
-	private String password = "";
+	private String to;
+	private String from;
+	private String host;
+	private String username;
+	private String password;
 	private String subject = "";
 	private String content = "";
-	private String filename = "";
+	private String filename;
 
 	public MailUtil() {
 
 	}
 
+	public MailUtil(String from, String host, String username, String password) {
+		this.from = from;
+		this.host = host;
+		this.username = username;
+		this.password = password;
+	}
+	
+	public MailUtil(String to, String from, String host, String username, String password, String subject,
+			String content) {
+		this.to = to;
+		this.from = from;
+		this.host = host;
+		this.username = username;
+		this.password = password;
+		this.subject = subject;
+		this.content = content;
+	}
+	
 	public MailUtil(String to, String from, String host, String username, String password, String subject,
 			String content, String filename) {
 		this.to = to;
@@ -109,7 +127,7 @@ public class MailUtil {
 			messageBodyPart = new MimeBodyPart();
 			DataSource source = new FileDataSource(filename);
 			messageBodyPart.setDataHandler(new DataHandler(source));
-			messageBodyPart.setFileName(filename);
+			messageBodyPart.setFileName(MimeUtility.encodeText(filename));	//解决附件名为中文时接收乱码
 			multipart.addBodyPart(messageBodyPart);
 
 			// Send the complete message parts
@@ -119,24 +137,9 @@ public class MailUtil {
 			transport.connect(host, username, password);
 			transport.sendMessage(message, message.getAllRecipients());
 
-			System.out.println("Sent message successfully.");
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
+			System.out.println("Sent " + filename + " successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) {
-		MailUtil sendmail = new MailUtil();
-
-		sendmail.setTo("466629332@qq.com");
-		sendmail.setFrom("466629332@qq.com");
-		sendmail.setHost("smtp.qq.com");
-		sendmail.setUsername("466629332@qq.com");
-		sendmail.setPassword("xxxxxxxx");
-		sendmail.setSubject("test subject");
-		sendmail.setContent("test content");
-		sendmail.setFilename("test.txt");
-
-		sendmail.sendMail();
 	}
 }
