@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 public class SendToKindle {
-	String to = "466629332@qq.com";
-	String bookName = "精灵宝钻";
-	int bookNum = 3;
+	private String to;
+	private String bookName;
+	private int bookNum;
 
 	public SendToKindle(String to, String bookName, int bookNum) {
 		this.to = to;
@@ -14,14 +14,12 @@ public class SendToKindle {
 		this.bookNum = bookNum;
 	}
 
-	public static void main(String[] args) throws Exception {
-		String to = "466629332@qq.com";
-		String bookName = "精灵宝钻";
-		int bookNum = 3;
-
+	public void run() throws Exception {
+		// 搜索与下载
 		SearchAndDown down = new SearchAndDown(bookName, bookNum);
 		down.run();
 
+		// 推送
 		File file = new File(".");
 		String[] fileList = file.list(new Filter(".mobi"));
 		for (int i = 0; i < fileList.length && i < bookNum; i++) { // 控制发送书的数目
