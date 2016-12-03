@@ -15,15 +15,15 @@ public class SendToKindle {
 	}
 
 	public void run() throws Exception {
-		// ËÑË÷ÓëÏÂÔØ
+		// æœç´¢ä¸ä¸‹è½½
 		SearchAndDown down = new SearchAndDown(bookName, bookNum);
 		down.run();
 
-		// ÍÆËÍ
+		// æ¨é€
 		File file = new File(".");
 		String[] fileList = file.list(new Filter(".mobi"));
-		for (int i = 0; i < fileList.length && i < bookNum; i++) { // ¿ØÖÆ·¢ËÍÊéµÄÊıÄ¿
-			MailUtil mail = new MailUtil("466629332@qq.com", "smtp.qq.com", "466629332@qq.com", "HAN921013");
+		for (int i = 0; i < fileList.length && i < bookNum; i++) { // æ§åˆ¶å‘é€ä¹¦çš„æ•°ç›®
+			MailUtil mail = new MailUtil("466629332@qq.com", "smtp.qq.com", "466629332@qq.com", "XXXXXX");
 			mail.setTo(to);
 			mail.setFilename(fileList[i]);
 			mail.sendMail();
